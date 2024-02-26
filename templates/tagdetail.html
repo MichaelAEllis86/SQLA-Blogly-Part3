@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Tag Detail {% endblock %}
+{% block content %}
+
+<h4>detail for tag "{{tag.name}}"</h4>
+
+
+<a class="btn btn-sm btn-warning" href="/tags">Go back</a> <a class="btn btn-sm btn-primary" href="/tags/{{tag.id}}/edit">Edit tag</a> 
+
+<div id="just-line-break">
+    <br/>
+</div>
+
+<form action="/tags/{{tag.id}}/delete" method="POST">
+    <button id="deletebutton" class="btn btn-sm btn-danger">Delete tag</button>
+    </form>
+
+
+<ul id="messagecontainer"></ul>
+
+<p>Thanks for browsing!</p>
+    
+</body>
+</html>
+{%endblock%}

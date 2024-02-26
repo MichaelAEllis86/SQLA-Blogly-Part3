@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} Tags list page{% endblock %}
+{% block content %}
+
+
+<h4>Tags list</h4>
+
+{% for tag in tags %}
+<div>
+<li> <a href="/tags/{{tag.id}}">{{tag.name}} </a></li>
+</div>
+{% endfor %}
+
+<ul id="messagecontainer"></ul>
+<p><a class="btn btn-sm btn-primary" href="/tags/new">Add tag</a></p> 
+<!-- i dont understand how we get a button out of this without an actual button tag! bootstrap magic i guess where it uses class css formating to make it into a tag? -->
+
+<p>Thanks for browsing!</p>
+    
+{%endblock%}
+
+
+
