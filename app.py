@@ -152,7 +152,8 @@ def show_edit_post_form_page(post_id):
     integer_post_id=int(post_id)
     post=Post.query.get_or_404(integer_post_id)
     integer_user_id=int(post.user_info.id)
-    return render_template("posteditform.html", post=post, integer_user_id=integer_user_id)
+    tags=Tag.query.all()
+    return render_template("posteditform.html", post=post, integer_user_id=integer_user_id, tags=tags)
 
 @app.route("/posts/<post_id>/delete", methods=['POST'])
 def handle_post_deletion(post_id):
@@ -164,20 +165,33 @@ def handle_post_deletion(post_id):
     flash(f"the previous post {post.title} is now deleted", "success")
     return redirect("/users")
 
+#Under Construction! issue with repeat tags being added and causing pyscopig integrity error. Need to solve by preventing readdition of existing tags. Commented out lines concern tag logic!!!
+# possible fixes 1. not show all the tags as an option, aka filter out tags already used and not render a box for them. 2. clear all tags associated with a post when we hit the edit screen for that post(this would cause loss of tags if not edit occurs!)
+# 3. conditional logic, if a tag id is already associated with a post, we do not add and commit that change to the db! Fixed using this!!!
 @app.route("/posts/<post_id>/edit", methods=['POST'])
 def handle_edit_post_edit(post_id):
     integer_post_id=int(post_id)
     post_title=request.form["title"]
     post_content=request.form["content"]
-    print(f"the form data is post_title={post_title} post_content={post_content}")
+    post_tag_list=request.form.getlist('tags')
     post=Post.query.get_or_404(integer_post_id)
+    print(f"the form data is post_title={post_title} post_content={post_content}")
+    print(f" The post_tag_list form data is {post_tag_list}")
+    used_tags=[idx.id for idx in post.post_tags]
     post.title=post_title
     post.content=post_content
     db.session.add(post)
     db.session.commit()
+    for tag in post_tag_list:
+        tag_query=Tag.query.get(int(tag))
+        if tag_query.id not in used_tags:
+            post.post_tags.append(tag_query)
+            db.session.add(tag_query)
+            db.session.commit()
     integer_user_id=int(post.user_info.id)
     flash("Post Edited!!", "success")
     return redirect (f"/posts/{integer_post_id}")
+
 
 # <----------Blogly tag Routes------------>
 
