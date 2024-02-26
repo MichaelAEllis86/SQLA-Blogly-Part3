@@ -11,11 +11,11 @@
 {% for post in recent_posts %}
 <li><a href="/posts/{{post.id}}">{{post.title}}.... Posted on {{post.format_date()}} </a></li>
 <b class="smallfont">tags:</b>
-{% for tag in post.post_tags %}
-<span>
-    <a class="btn btn-sm btn-primary tinyfont" href="/tags/{{tag.id}}"><i>{{tag.name}}</i></a>
-</span>
-{% endfor %}
+    {% for tag in post.post_tags %}
+    <span>
+        <a class="btn btn-sm btn-dark tinyfont" href="/tags/{{tag.id}}"><i>{{tag.name}}</i></a>
+    </span>
+    {% endfor %}
 {% endfor %}
 
 <ul id="messagecontainer"></ul>

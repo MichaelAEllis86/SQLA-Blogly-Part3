@@ -20,7 +20,7 @@ app.config['SECRET_KEY']="oh-so-secret"
 debug=DebugToolbarExtension(app)
 
 connect_db(app)
-# Home/Base Route
+# <----------Blogly Home Page------------>
 
 @app.route("/")
 def show_base():
@@ -28,8 +28,8 @@ def show_base():
     
     posts=Post.query
     recent_posts=posts.order_by(desc('created_at')).limit(5).all()
-
-    #could've also run the code below as the query! this syntax avoids the the import desc in line 6 and is springboard's solution
+   
+    #could've also run the code below as the query logic! this syntax avoids the the import desc in line 6 and is springboard's solution
     # posts = Post.query.order_by(Post.created_at.desc()).limit(5).all()
 
 
@@ -75,7 +75,7 @@ def show_user_details(user_id):
 @app.route("/users/<user_id>/edit")
 def show_user_edit(user_id):
     """Show form page to edit an existing user"""
-    user=User.query.get(user_id)
+    user=User.query.get_or_404(user_id)
     return render_template("usereditform.html", user=user,user_id=user_id)
 
 @app.route("/users/<user_id>/edit", methods=['POST'])
@@ -109,13 +109,14 @@ def handle_user_delete(user_id):
 
 # <----------Blogly Post Routes------------>
 
+#updated for tags!
 @app.route("/users/<user_id>/posts/new")
 def show_new_post_form_page(user_id):
     user=User.query.get_or_404(int(user_id))
     integer_user_id=int(user_id)
     tags=Tag.query.all()
     return render_template("newpostform.html", user=user, integer_user_id=integer_user_id, tags=tags)
-
+#updated for tags!
 @app.route("/users/<user_id>/posts/new", methods=['POST'])
 def handle_new_post_form_page(user_id):
     integer_user_id=int(user_id)
@@ -136,7 +137,7 @@ def handle_new_post_form_page(user_id):
     flash(f"your new post is {new_post.title}, created by {new_post.user_info.first_name} {new_post.user_info.last_name} on {new_post.format_date()}", "success")
     return redirect (f"/users/{integer_user_id}")
 
-#updating for post tag inclusion
+#updated for tags!
 @app.route("/posts/<post_id>")
 def show_post(post_id):
     integer_post_id=int(post_id)
@@ -252,9 +253,9 @@ def page_not_found(e):
     return render_template('404.html', error=e), 404
     
 # to do!!!!!
-# further study for part 3, new route testing, update add and edit post routes so a user may apply tags to a post
+# further study for part 3, new route testing, update  edit post routes so a user may apply tags to a post
 
-# seems like what we should do is query for all the tags, loop over a list of those tags and display them in a multi-input form, then make sure we grab that data and update M2M/secondary table with form info
+# DONE!seems like what we should do is query for all the tags, loop over a list of those tags and display them in a multi-input form, then make sure we grab that data and update M2M/secondary table with form info
 
 
 

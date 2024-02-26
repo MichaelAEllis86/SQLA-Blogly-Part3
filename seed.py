@@ -41,14 +41,15 @@ T4=Tag(name="Pop Culture")
 T5=Tag(name="Art")
 T6=Tag(name="Gaming")
 T7=Tag(name="Science")
-T8=Tag(name="food")
-T9=Tag(name="memes")
+T8=Tag(name="Food")
+T9=Tag(name="Memes")
 
 
 db.session.add_all([T1,T2,T3,T4,T5,T6,T7,T8,T9])
 db.session.commit()
 
-#giving each post multiple tags to test M2M relations Tags used more than once are:2X T2=Tag(name="Sports"), 3X T3=Tag(name="Animals"), 2X T4=Tag(name="Pop Culture",3X T7=Tag(name="Science"), 2X T9=Tag(name="memes"))
+#giving each post multiple tags to test M2M relations. Not every tag is used in more than one post. 
+# Tags used in more than once are as follows:2X T2=Tag(name="Sports"), 3X T3=Tag(name="Animals"), 2X T4=Tag(name="Pop Culture",3X T7=Tag(name="Science"), 2X T9=Tag(name="memes"))
 PT1=PostTag(post_id=P1.id, tag_id=T8.id)
 PT2=PostTag(post_id=P1.id, tag_id=T7.id)
 PT3=PostTag(post_id=P2.id, tag_id=T4.id)
