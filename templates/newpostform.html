@@ -9,8 +9,23 @@
     <input type="text" name="title">
     <p id="lastnametag">Content</p>
     <textarea name="content" id="contentbox" cols="30" rows="5"></textarea>
+    <div id="just-line-break">
+        <i>Apply Post Tags</i>
+        <br/>
+    </div>
+    {% for tag in tags %}
+    <label> {{tag.name}}
+        <input type="checkbox" name="tags" value="{{tag.id}}">
+    </label>
+    {% endfor %}
     <button id="button">Submit Post</button>
 </form>
+
+<!-- {% for tag in tags %}
+<div>
+<li> <a href="/tags/{{tag.id}}">{{tag.name}} </a></li>
+</div>
+{% endfor %} -->
 
 <ul id="messagecontainer"></ul>
 

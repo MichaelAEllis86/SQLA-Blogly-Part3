@@ -113,17 +113,25 @@ def handle_user_delete(user_id):
 def show_new_post_form_page(user_id):
     user=User.query.get_or_404(int(user_id))
     integer_user_id=int(user_id)
-    return render_template("newpostform.html", user=user, integer_user_id=integer_user_id)
+    tags=Tag.query.all()
+    return render_template("newpostform.html", user=user, integer_user_id=integer_user_id, tags=tags)
 
 @app.route("/users/<user_id>/posts/new", methods=['POST'])
 def handle_new_post_form_page(user_id):
     integer_user_id=int(user_id)
     post_title=request.form['title']
     post_content=request.form['content']
+    post_tag_list=request.form.getlist('tags')
     print(f"the form data is post_title={post_title} post_content={post_content}")
+    print(f" The post_tag_list form data is {post_tag_list}")
     new_post=Post(title=post_title, content=post_content, user_id=int(user_id))
     db.session.add(new_post)
     db.session.commit()
+    for tag in post_tag_list:
+        tag=Tag.query.get(int(tag))
+        new_post.post_tags.append(tag)
+        db.session.add(tag)
+        db.session.commit()
     flash("new post created!!")
     flash(f"your new post is {new_post.title}, created by {new_post.user_info.first_name} {new_post.user_info.last_name} on {new_post.format_date()}", "success")
     return redirect (f"/users/{integer_user_id}")
@@ -244,6 +252,9 @@ def page_not_found(e):
     return render_template('404.html', error=e), 404
     
 # to do!!!!!
-# further study for part 2
+# further study for part 3, new route testing, update add and edit post routes so a user may apply tags to a post
+
+# seems like what we should do is query for all the tags, loop over a list of those tags and display them in a multi-input form, then make sure we grab that data and update M2M/secondary table with form info
+
 
 

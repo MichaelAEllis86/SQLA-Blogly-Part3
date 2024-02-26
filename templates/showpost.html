@@ -6,11 +6,11 @@
 
 <p>{{post.content}}</p>
 
-{% for tag in post_tags %}
-<div>
-<li> <a class="btn btn-sm btn-primary" href="/tags/{{tag.id}}">{{tag.name}}</a></li>
-</div>
-{% endfor %}
+<span>tags: {% for tag in post_tags %}
+    <a class="btn btn-sm btn-primary tinyfont" href="/tags/{{tag.id}}">{{tag.name}}</a>
+   {% endfor %}</span>
+
+
 
 
 <i>By {{post.user_info.first_name}} {{post.user_info.last_name}}</i>

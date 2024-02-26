@@ -1,6 +1,8 @@
 p{
     
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: black;
+    font-size: 12px;
 }
 
 /* h1{
@@ -76,10 +78,8 @@ h1{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
 
-p{
-    color: black;
-    font-size: 12px;
-
+.tinyfont{
+    font-size:8px ;
 }
 
 /* .smalltextbtn{
