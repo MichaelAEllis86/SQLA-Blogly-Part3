@@ -56,7 +56,6 @@ class Post(db.Model):
         
         return f"{named_month} {self.created_at.day}, {self.created_at.year} at {friendly_time}"
 
-    @classmethod
     def print_current_time(self):
         print(f"{datetime.now()}")
         return(f"{datetime.now()}")
@@ -83,7 +82,7 @@ class Post(db.Model):
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'))
 
     user_info=db.relationship("User")
-    post_tags=db.relationship("Tag", secondary="posts_tags", backref="posts" )
+    post_tags=db.relationship("Tag", secondary="posts_tags", backref="posts")
 
 class Tag(db.Model):
     """ Tags model! Tags give categories to posts. A tag can have many posts"""

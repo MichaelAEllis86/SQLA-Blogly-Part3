@@ -5,6 +5,8 @@ from models import db, connect_db, User, Post, Tag, PostTag
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 
+
+
 app=Flask(__name__)
 app.app_context().push()
 # app.config['SQLALCHEMY_DATABASE_URI']='postgresql:///blogly_db'
@@ -129,9 +131,9 @@ def handle_new_post_form_page(user_id):
     db.session.add(new_post)
     db.session.commit()
     for tag in post_tag_list:
-        tag=Tag.query.get(int(tag))
-        new_post.post_tags.append(tag)
-        db.session.add(tag)
+        new_tag=Tag.query.get(int(tag))
+        new_post.post_tags.append(new_tag)
+        db.session.add(new_tag)
         db.session.commit()
     flash("new post created!!")
     flash(f"your new post is {new_post.title}, created by {new_post.user_info.first_name} {new_post.user_info.last_name} on {new_post.format_date()}", "success")
@@ -159,7 +161,7 @@ def show_edit_post_form_page(post_id):
 def handle_post_deletion(post_id):
     integer_post_id=int(post_id)
     post=Post.query.get_or_404(integer_post_id)
-    Post.query.filter_by(id=integer_post_id).delete()
+    db.session.delete(post)
     db.session.commit()
     flash("Post deleted!!")
     flash(f"the previous post {post.title} is now deleted", "success")
@@ -169,7 +171,7 @@ def handle_post_deletion(post_id):
 # possible fixes 1. not show all the tags as an option, aka filter out tags already used and not render a box for them. 2. clear all tags associated with a post when we hit the edit screen for that post(this would cause loss of tags if not edit occurs!)
 # 3. conditional logic, if a tag id is already associated with a post, we do not add and commit that change to the db! Fixed using this!!!
 @app.route("/posts/<post_id>/edit", methods=['POST'])
-def handle_edit_post_edit(post_id):
+def handle_edit_post(post_id):
     integer_post_id=int(post_id)
     post_title=request.form["title"]
     post_content=request.form["content"]
@@ -251,8 +253,8 @@ def handle_tag_edit_form(tag_id):
 def handle_tag_delete(tag_id):
     """Handle deletion of a tag via form submit on tags detail page"""
     integer_tag_id=int(tag_id)
-    tag=Tag.query.get(integer_tag_id)
-    Tag.query.filter_by(id=integer_tag_id).delete()
+    tag=Tag.query.get_or_404(integer_tag_id)
+    db.session.delete(tag)
     db.session.commit()
     flash("tag deleted!!")
     flash(f"the previous tag: {tag.name} is now deleted", "success")
